@@ -1,6 +1,11 @@
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 const Sidebar = () => {
+  // routing de next
+  const router = useRouter();
+
+  console.log(router.pathname);
   return (
     <aside className="bg-blue-900 sm:w-1/3 lg:w-1/5 sm:min-h-screen p-5">
       <div>
@@ -8,15 +13,26 @@ const Sidebar = () => {
       </div>
 
       <nav className="mt-5 list-none">
-        <li>
-          <a className="text-white mb-2 block">
-            <Link href="/">Clientes</Link>
-          </a>
+        <li className={router.pathname === '/' ? 'bg-blue-800 p-2' : 'p-2'}>
+          <Link href="/">
+            <a className="text-white block">Clientes</a>
+          </Link>
         </li>
-        <li>
-          <a className="text-white mb-2 block">
-            <Link href="/pedidos">Pedidos</Link>
-          </a>
+        <li
+          className={router.pathname === '/pedidos' ? 'bg-blue-800 p-2' : 'p-2'}
+        >
+          <Link href="/pedidos">
+            <a className="text-white block">Pedidos</a>
+          </Link>
+        </li>
+        <li
+          className={
+            router.pathname === '/productos' ? 'bg-blue-800 p-2' : 'p-2'
+          }
+        >
+          <Link href="/productos">
+            <a className="text-white block">Productos</a>
+          </Link>
         </li>
       </nav>
     </aside>
