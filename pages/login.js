@@ -1,7 +1,9 @@
+import React, { useState } from 'react';
 import Layout from '../components/Layout';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useMutation, gql } from '@apollo/client';
+import { useRouter } from 'next/router';
 
 const AUTH = gql`
   mutation autenticarUsuario($input: AutenticarInput) {
@@ -12,6 +14,11 @@ const AUTH = gql`
 `;
 
 const Login = () => {
+  const router = useRouter();
+
+  // State para el mensaje
+  const [mensaje, setMensaje] = useState(null);
+
   // Mutation para crear nuevos usuarios en Apollo
   const [autenticarUsuario] = useMutation(AUTH);
 
@@ -40,15 +47,38 @@ const Login = () => {
           },
         });
         console.log(data);
+        setMensaje('Autenticando...');
+
+        // Guardar el token en el localstorage
+        const { token } = data.autenticarUsuario;
+        localStorage.setItem('token', token);
+
+        setTimeout(() => {
+          setMensaje(null);
+          router.push('/');
+        }, 3000);
       } catch (error) {
-        console.log(error);
+        setMensaje(error.message);
+
+        setTimeout(() => {
+          setMensaje(null);
+        }, 3000);
       }
     },
   });
 
+  const mostrarMensaje = () => {
+    return (
+      <div className="bg-red-100 border-l-4 border-t border-b border-red-500 text-red-700 py-2 px-3 w-full my-3 max-w-sm text-center mx-auto">
+        <p>{mensaje}</p>
+      </div>
+    );
+  };
+
   return (
     <>
       <Layout>
+        {mensaje && mostrarMensaje()}
         <h1 className="text-center text-2xl text-white">Login</h1>
         <div className="flex justify-center mt-5">
           <div className="w-full max-w-sm">

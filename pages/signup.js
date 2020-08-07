@@ -68,12 +68,11 @@ const Signup = () => {
           `Se creó correctamente el Usuario: ${data.nuevoUsuario.nombre}`
         );
 
+        // Redirigir al usuario para iniciar sesión
         setTimeout(() => {
           setMensaje(null);
           router.push('/login');
         }, 3000);
-
-        // Redirigir al usuario para iniciar sesión
       } catch (error) {
         setMensaje(error.message);
 
