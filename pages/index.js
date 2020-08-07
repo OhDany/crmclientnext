@@ -18,9 +18,9 @@ const Index = () => {
   // Condulata de Apollo
   const { data, loading, error } = useQuery(OBTENER_CLIENTE_USUARIO);
 
-  console.log(data);
-  console.log(loading);
-  console.log(error);
+  // console.log(data);
+  // console.log(loading);
+  // console.log(error);
 
   if (loading) return 'Cargando...';
 
