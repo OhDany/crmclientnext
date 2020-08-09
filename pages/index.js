@@ -1,8 +1,9 @@
 import Head from 'next/head';
 import Layout from '../components/Layout';
 import { useQuery, gql } from '@apollo/client';
+import { useRouter } from 'next/router';
 
-const OBTENER_CLIENTE_USUARIO = gql`
+const OBTENER_CLIENTES_USUARIO = gql`
   query obtenerClientesVendedor {
     obtenerClientesVendedor {
       id
@@ -15,14 +16,19 @@ const OBTENER_CLIENTE_USUARIO = gql`
 `;
 
 const Index = () => {
+  const router = useRouter();
   // Condulata de Apollo
-  const { data, loading, error } = useQuery(OBTENER_CLIENTE_USUARIO);
+  const { data, loading, error } = useQuery(OBTENER_CLIENTES_USUARIO);
 
   // console.log(data);
   // console.log(loading);
   // console.log(error);
 
   if (loading) return 'Cargando...';
+
+  if (!data.obtenerClientesVendedor) {
+    return router.push('/login');
+  }
 
   return (
     <div>
