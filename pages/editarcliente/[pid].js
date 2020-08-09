@@ -32,6 +32,16 @@ const EditarCliente = () => {
     },
   });
 
+  // Schema de validacion
+  const schemaValidacion = Yup.object({
+    nombre: Yup.string().required('El nombre del cliente es obligatorio'),
+    apellido: Yup.string().required('El apellido del cliente es obligatorio'),
+    empresa: Yup.string().required('El campo empresa  es obligatorio'),
+    email: Yup.string()
+      .email('Email no válido')
+      .required('El email del cliente es obligatorio'),
+  });
+
   if (loading) return 'Cargando...';
 
   return (
@@ -40,7 +50,7 @@ const EditarCliente = () => {
 
       <div className="flex justify-center mt-5">
         <div className="w-full max-w-lg">
-          <Formik>
+          <Formik validationSchema={schemaValidacion}>
             {(props) => {
               console.log(props);
 
@@ -68,11 +78,11 @@ const EditarCliente = () => {
                     />
                   </div>
 
-                  {/* {formik.touched.nombre && formik.errors.nombre ? (
-              <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-2">
-                <p>{formik.errors.nombre}</p>
-              </div>
-            ) : null} */}
+                  {props.touched.nombre && props.errors.nombre ? (
+                    <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-2">
+                      <p>{props.errors.nombre}</p>
+                    </div>
+                  ) : null}
 
                   <div className="mb-4">
                     <label
@@ -93,11 +103,11 @@ const EditarCliente = () => {
                     />
                   </div>
 
-                  {/* {formik.touched.apellido && formik.errors.apellido ? (
-              <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-2">
-                <p>{formik.errors.apellido}</p>
-              </div>
-            ) : null} */}
+                  {props.touched.apellido && props.errors.apellido ? (
+                    <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-2">
+                      <p>{props.errors.apellido}</p>
+                    </div>
+                  ) : null}
 
                   <div className="mb-4">
                     <label
@@ -118,11 +128,11 @@ const EditarCliente = () => {
                     />
                   </div>
 
-                  {/* {formik.touched.empresa && formik.errors.empresa ? (
-              <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-2">
-                <p>{formik.errors.empresa}</p>
-              </div>
-            ) : null} */}
+                  {props.touched.empresa && props.errors.empresa ? (
+                    <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-2">
+                      <p>{props.errors.empresa}</p>
+                    </div>
+                  ) : null}
 
                   <div className="mb-4">
                     <label
@@ -143,11 +153,11 @@ const EditarCliente = () => {
                     />
                   </div>
 
-                  {/* {formik.touched.email && formik.errors.email ? (
-              <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-2">
-                <p>{formik.errors.email}</p>
-              </div>
-            ) : null} */}
+                  {props.touched.email && props.errors.email ? (
+                    <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-2">
+                      <p>{props.errors.email}</p>
+                    </div>
+                  ) : null}
 
                   <div className="mb-4">
                     <label
