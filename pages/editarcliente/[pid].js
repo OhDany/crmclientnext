@@ -4,6 +4,7 @@ import Layout from '../../components/Layout';
 import { useQuery, gql, useMutation } from '@apollo/client';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import Swal from 'sweetalert2';
 
 const OBTENER_CLIENTE = gql`
   query obtenerCliente($id: ID!) {
@@ -13,6 +14,15 @@ const OBTENER_CLIENTE = gql`
       email
       telefono
       empresa
+    }
+  }
+`;
+
+const ACTUALIZAR_CLIENTE = gql`
+  mutation actualizarCliente($id: ID!, $input: ClienteInput) {
+    actualizarCliente(id: $id, input: $input) {
+      nombre
+      email
     }
   }
 `;
@@ -32,6 +42,9 @@ const EditarCliente = () => {
     },
   });
 
+  // Actualizar el cliente
+  const [actualizarCliente] = useMutation(ACTUALIZAR_CLIENTE);
+
   // Schema de validacion
   const schemaValidacion = Yup.object({
     nombre: Yup.string().required('El nombre del cliente es obligatorio'),
@@ -48,6 +61,40 @@ const EditarCliente = () => {
 
   const { obtenerCliente } = data;
 
+  // Modifica el cliente en la BD
+  const actualizarInfoCliente = async (valores) => {
+    const { nombre, apellido, empresa, email, telefono } = valores;
+
+    try {
+      const { data } = await actualizarCliente({
+        variables: {
+          id,
+          input: {
+            nombre,
+            apellido,
+            empresa,
+            email,
+            telefono,
+          },
+        },
+      });
+
+      // console.log(data);
+
+      // Mostrar Alerta
+      Swal.fire(
+        'Actualizado',
+        'El cliente se actualizó correctamente',
+        'success'
+      );
+
+      // Redireccionar
+      router.push('/');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Layout>
       <h1 className="text-2xl text-gray-800 font-light">Editar Cliente</h1>
@@ -59,7 +106,7 @@ const EditarCliente = () => {
             enableReinitialize
             initialValues={obtenerCliente}
             onSubmit={(valores) => {
-              console.log(valores);
+              actualizarInfoCliente(valores);
             }}
           >
             {(props) => {
