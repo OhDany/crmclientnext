@@ -38,7 +38,7 @@ const Index = () => {
         <h1 className="text-2xl text-gray-800 font-light">Clientes</h1>
 
         <Link href="/nuevocliente">
-          <a className="bg-blue-800 py-2 px-5 mt-3 inline-block text-white rounded text-sm hover:bg-gray-800 uppercase font-bold w-full lg:w-auto text-center">
+          <a className="bg-blue-500 py-2 px-5 mt-3 inline-block text-white rounded text-sm hover:bg-blue-700 uppercase font-bold w-full lg:w-auto text-center">
             Nuevo Cliente
           </a>
         </Link>
@@ -50,6 +50,7 @@ const Index = () => {
               <th className="w-1/5 py-2">Empresa</th>
               <th className="w-1/5 py-2">Email</th>
               <th className="w-1/5 py-2">Elimiar</th>
+              <th className="w-1/5 py-2">Editar</th>
             </tr>
           </thead>
           <tbody className="bg-white">
