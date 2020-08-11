@@ -1,7 +1,75 @@
 import React from 'react';
+import Swal from 'sweetalert2';
+import { gql, useMutation } from '@apollo/client';
+
+const ELIMINAR_PRODUCTO = gql`
+  mutation eliminarProducto($id: ID!) {
+    eliminarProducto(id: $id)
+  }
+`;
+
+const OBTENER_PRODUCTOS = gql`
+  query obtenerProductos {
+    obtenerProductos {
+      id
+      nombre
+      precio
+      existencia
+      creado
+    }
+  }
+`;
 
 const Producto = ({ producto }) => {
   const { nombre, precio, existencia, id } = producto;
+
+  // Mutation para eliminar productos
+  const [eliminarProducto] = useMutation(ELIMINAR_PRODUCTO, {
+    update(cache) {
+      const { obtenerProductos } = cache.readQuery({
+        query: OBTENER_PRODUCTOS,
+      });
+
+      cache.writeQuery({
+        query: OBTENER_PRODUCTOS,
+        data: {
+          obtenerProductos: obtenerProductos.filter(
+            (productoActual) => productoActual.id !== id
+          ),
+        },
+      });
+    },
+  });
+
+  const confirmarEliminarProducto = () => {
+    Swal.fire({
+      title: '¿Deseas eliminar a este producto?',
+      text: 'Esta acción no se puede deshacer',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, Eliminar',
+      cancelButtonText: 'No, Cancelar',
+    }).then(async (result) => {
+      if (result.value) {
+        try {
+          // eliminar producto de la bd
+          const { data } = await eliminarProducto({
+            variables: {
+              id,
+            },
+          });
+
+          // console.log(data);
+
+          Swal.fire('Correcto', data.eliminarProducto, 'success');
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    });
+  };
 
   return (
     <tr>
